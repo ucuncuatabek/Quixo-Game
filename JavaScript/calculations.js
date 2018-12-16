@@ -18,6 +18,12 @@ $(function() {
 			start : function(event, ui) {
 				startIndex 	 = $(ui.item).prevAll().length;
 	            belongedList = $(ui.item).parent().attr("id");
+	            var temp = `<li  class="ui-state-default ghost"></li>`
+	            if(startIndex == 0){
+	            	 $("#"+belongedList).prepend(temp);
+	            } else {
+	            	 $("#"+belongedList +" li").eq(startIndex-1).after(temp)
+	            }
 	            var value;
 				if( $(ui.item).text() == "" ) {
 					if(currentRound%2 == 0 ) {
@@ -31,6 +37,7 @@ $(function() {
 				}
 			},
 			stop :  function(event, ui) {
+				$(".ghost").remove();
 				placedIndex = $(ui.item).prevAll().length;
 				placedInto 	= $(ui.item).parent().attr("id");
 				var result = checkLegality(startIndex, belongedList, placedIndex, placedInto);
@@ -58,7 +65,7 @@ $(function() {
 						currentRound++;
 					}
 				} else {
-					alert("Illegal Move");
+
 					if( $(ui.item).data("fixed") == null ) {
 						$(ui.item).text("");
 					}
