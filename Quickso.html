@@ -1,0 +1,68 @@
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.css">
+    <script type = "text/javascript" src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
+    <script type = "text/javascript" src="jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+    <script type = "text/javascript" src="JavaScript/calculations.js"></script>
+
+    <style>
+      .connectedSortable {
+        border: 1px solid #eee;
+        width: 72px;
+        min-height: 20px;
+        list-style-type: none;
+        margin: 0;
+        padding: 5px 0 0 0;
+        float: left;
+        margin-right: 10px;
+      }
+     .connectedSortable li {
+        line-height: 40px;
+        border-radius:4px;
+        margin: 0 5px 5px 5px;
+        padding: 5px;
+        font-size: 50px;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        user-select: none;
+        cursor:pointer;
+      }
+      .ui-sortable-placeholder {
+        width: 45px;
+        height:15px;
+        background:#a005ef;
+      }
+      .disabled{
+        background: #dc3545;
+        cursor:default !important;
+      }
+      .center{
+        background:grey;
+      }
+      .board{
+        position:fixed;
+        top:30%;
+        left:40%;
+      }
+      [data-sign = "-1"]{
+        background:blue;
+      }
+      [data-sign = "1"]{
+        background:red;
+      }
+      [data-sign] {
+        color: white;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <h2 class="current-round"> Current Round : <span></span> </h2>
+    <div class="board">
+    </div>
+
+
+  </body>
+</html>
