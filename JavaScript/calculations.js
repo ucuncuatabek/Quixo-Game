@@ -29,14 +29,13 @@ $(function() {
 					}
 					$(ui.item).text(value);
 				}
-				var items = "";
+				var columnsToDisable = [];
 				$("ul").each(function(key,value) {
 					if($(value).attr("id") !== belongedList) {
-						items += " #" + $(value).attr("id") + ",";
+						items.push("#" + $(value).attr("id"));
 					}
 				});
-				items = items.substr(0, (items.length)-1);
-				console.log(items.toString())
+				console.log(items);
 				$(items).sortable("disable")
 			},
 			stop :  function(event, ui) {
