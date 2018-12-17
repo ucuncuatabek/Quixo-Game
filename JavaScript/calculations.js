@@ -292,15 +292,16 @@ $(function() {
 		} else {
 			console.log("sag")
 			var temp1, temp2;
-			for(var i = 0; i < steps; i++) {
+			for(var i = steps; i > 0; i--) {
 				if(startIndex == 0) {
-					if ( i==0 ) {
-						temp1 = $("#sortable" + i + " li").get(placeHolderIndex+ 1);
+					if ( i == steps ) {
+						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1);
+						console.log("#sortable" + i + " li","jshdkjadhjkasdl")
 					}
 					console.log(temp1)
-					temp2 = $("#sortable" + (i+1) + " li").get(placeHolderIndex);
+					temp2 = $("#sortable" + (i-1) + " li").get(placeHolderIndex);
 					if(placeHolderIndex == 0) {
-						$("#sortable" + (i+1)).prepend(temp1);
+						$("#sortable" + (i-1)).prepend(temp1);
 						console.log("prepended : ", temp1)
 					} else {
 						$("#sortable" + i + " li").get(placeHolderIndex-1).after(temp1);
@@ -312,12 +313,12 @@ $(function() {
 				else {
 					console.log("burdayım");
 
-					if ( i==0 ) {
+					if ( i == steps ) {
 						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1);
 						$("#sortable" + i + " li").eq(startIndex+1).remove();
 					}
-					temp2 = $("#sortable" + (i+1) + " li").get(placeHolderIndex);
-					$("#sortable" + (i+1) + " li").get(placeHolderIndex-1).after(temp1);
+					temp2 = $("#sortable" + (i-1) + " li").get(placeHolderIndex);
+					$("#sortable" + (i-1) + " li").get(placeHolderIndex-1).after(temp1);
 					console.log(temp1, "TEMP")
 					console.log(temp2,"TEMP1")
 					temp1 = temp2;
