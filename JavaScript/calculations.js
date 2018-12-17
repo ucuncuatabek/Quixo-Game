@@ -29,14 +29,16 @@ $(function() {
 					}
 					$(ui.item).text(value);
 				}
-				var columnsToDisable = [];
+				var items = "";
 				$("ul").each(function(key,value) {
-					if($(value).attr("id") !== belongedList) {
-						items.push("#" + $(value).attr("id"));
+					if($(value).attr("id") !== belongedList && (key > 0 && key < listSize-1)) {
+						items += "#" + $(value).attr("id") + ",";
 					}
 				});
-				console.log(items);
-				$(items).sortable("disable")
+				var disable = items.substring(0,(items.length)-1);
+				console.log(disable)
+				$(disable).sortable("disable");
+				$("#" + belongedList).sortable("refresh");
 			},
 			stop :  function(event, ui) {
 				placedIndex = $(ui.item).prevAll().length;
@@ -123,7 +125,7 @@ $(function() {
 			for (var i = 0; i < size; i++) {
 				tmp = `<ul id="sortable${i}" class="connectedSortable" data-place="${i}">`;
 				for(var j = 0; j < size; j++) {
-					tmp += `<li id="${j}${i}" class="ui-state-default"></li>`;
+					tmp += `<li id="${j}${i}" class="ui-state-default">${j}${i}</li>`;
 				}
 				tmp += "</ul>";
 				$(".board").append(tmp);
@@ -304,13 +306,10 @@ $(function() {
 				if(startIndex == 0) {
 					if ( i == steps ) {
 						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1);
-						console.log("#sortable" + i + " li","jshdkjadhjkasdl")
 					}
-					console.log(temp1)
 					temp2 = $("#sortable" + (i-1) + " li").get(placeHolderIndex);
 					if(placeHolderIndex == 0) {
 						$("#sortable" + (i-1)).prepend(temp1);
-						console.log("prepended : ", temp1)
 					} else {
 						$("#sortable" + i + " li").get(placeHolderIndex-1).after(temp1);
 					}
@@ -320,7 +319,6 @@ $(function() {
 				}
 				else {
 					console.log("burdayım");
-
 					if ( i == steps ) {
 						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1);
 						$("#sortable" + i + " li").eq(startIndex+1).remove();
