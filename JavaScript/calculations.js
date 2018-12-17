@@ -115,7 +115,7 @@ $(function() {
 			for (var i = 0; i < size; i++) {
 				tmp = `<ul id="sortable${i}" class="connectedSortable" data-place="${i}">`;
 				for(var j = 0; j < size; j++) {
-					tmp += `<li id="${j}${i}" class="ui-state-default">${j}${i}</li>`;
+					tmp += `<li id="${j}${i}" class="ui-state-default"></li>`;
 				}
 				tmp += "</ul>";
 				$(".board").append(tmp);
