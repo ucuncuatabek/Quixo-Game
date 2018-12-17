@@ -29,6 +29,15 @@ $(function() {
 					}
 					$(ui.item).text(value);
 				}
+				var items = "";
+				$("ul").each(function(key,value) {
+					if($(value).attr("id") !== belongedList) {
+						items += " #" + $(value).attr("id") + ",";
+					}
+				});
+				items = items.substr(0, (items.length)-1);
+				console.log(items.toString())
+				$(items).sortable("disable")
 			},
 			stop :  function(event, ui) {
 				placedIndex = $(ui.item).prevAll().length;
@@ -338,7 +347,6 @@ $(function() {
 				shiftLive(placeHolderList,belongedListPlace,currentListPlace,placeHolderIndex,placeHolderList);
 				counter++;
 			}
-
 		}
 	});
 
