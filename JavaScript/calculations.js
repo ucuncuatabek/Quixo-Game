@@ -2,13 +2,13 @@
 $(function() {
 	draw(5);
 	initialize();
-	var lastState, startIndex, belongedList, placedInto, placedIndex,currentRound = 0;
+	var lastState, startIndex, belongedList, placedInto, placedIndex, currentRound = 0;
 	var list = [];
 	var listSize;
 	var classes = {};
 	var symbols = {};
 	var htmls = {};
-
+	var counter = 0;
 	function initialize() {
 		disableCenter();
 		$(".connectedSortable").sortable({
@@ -17,14 +17,8 @@ $(function() {
 			placeholder: "ui-state-highlight",
 			start : function(event, ui) {
 				startIndex 	 = $(ui.item).prevAll().length;
-	            belongedList = $(ui.item).parent().attr("id");
-	            var temp = `<li  class="ui-state-default ghost"></li>`
-	            if(startIndex == 0){
-	            	 $("#"+belongedList).prepend(temp);
-	            } else {
-	            	 $("#"+belongedList +" li").eq(startIndex-1).after(temp)
-	            }
-	            var value;
+				belongedList = $(ui.item).parent().attr("id");
+				var value;
 				if( $(ui.item).text() == "" ) {
 					if(currentRound%2 == 0 ) {
 						value = "x";
@@ -37,13 +31,12 @@ $(function() {
 				}
 			},
 			stop :  function(event, ui) {
-				$(".ghost").remove();
 				placedIndex = $(ui.item).prevAll().length;
 				placedInto 	= $(ui.item).parent().attr("id");
 				var result = checkLegality(startIndex, belongedList, placedIndex, placedInto);
 				if(result) {
 					if (placedInto !== belongedList ) {
-					    shiftLive(placedInto,placedIndex);
+						shiftLive(placedInto,placedIndex);
 					}
 					if(placedIndex == startIndex && placedInto == belongedList) {
 						if( $(ui.item).attr("fixed") == null ) {
@@ -61,11 +54,11 @@ $(function() {
 						saveLastState();
 						checkWinner();
 						disableCenter();
+						counter = 0;
 						$(".current-round span").text(currentRound+1)
 						currentRound++;
 					}
 				} else {
-
 					if( $(ui.item).data("fixed") == null ) {
 						$(ui.item).text("");
 					}
@@ -81,21 +74,21 @@ $(function() {
 			if($(element).hasClass("center")){
 				jQuery(element).removeClass("disabled center");
 			}
-        });
-        $.each($(".connectedSortable"), function(key,element) {
-            if(key > 0 && key < listSize-1) {
-                $.each($(element).find("li"),function(key,li) {
-                    if(key > 0 && key < listSize-1 ) {
-                        jQuery(li).addClass("disabled center");
-                    } else {
-                        if(jQuery(li).hasClass("disabled center")){
-                            jQuery(li).removeClass("disabled center");
-                        }
-                    }
-                })
-            }
-        });
-    };
+		});
+		$.each($(".connectedSortable"), function(key,element) {
+			if(key > 0 && key < listSize-1) {
+				$.each($(element).find("li"),function(key,li) {
+					if(key > 0 && key < listSize-1 ) {
+						jQuery(li).addClass("disabled center");
+					} else {
+						if(jQuery(li).hasClass("disabled center")){
+							jQuery(li).removeClass("disabled center");
+						}
+					}
+				})
+			}
+		});
+	};
 
 	function disableByRound(round) {
 		$(".connectedSortable").sortable("destroy")
@@ -122,7 +115,7 @@ $(function() {
 			for (var i = 0; i < size; i++) {
 				tmp = `<ul id="sortable${i}" class="connectedSortable" data-place="${i}">`;
 				for(var j = 0; j < size; j++) {
-					tmp += `<li id="${j}${i}" class="ui-state-default"></li>`;
+					tmp += `<li id="${j}${i}" class="ui-state-default">${j}${i}</li>`;
 				}
 				tmp += "</ul>";
 				$(".board").append(tmp);
@@ -175,7 +168,7 @@ $(function() {
 		console.log("state saved!");
 	}
 
-	function shiftLive(currentList, index) {
+	/*function shiftLive(currentList, index) {
 		console.clear();
 		console.log("shift calisti");
 		var listIndex = parseInt($("#"+currentList).attr("data-place"));
@@ -254,24 +247,100 @@ $(function() {
 			            	}
 			            }
 	            	}
-		            /*if( "sortable" + (i-1) !== belongedList) {
-		            	if(index == 0) {
-		            		$("#sortable"+ (i-1)).prepend(temp);
-		            	} else {
-		            		$("#sortable"+ (i-1) + " li").get(index-1).after(temp);
-		            	}
-		            } else {
-		            	if(index == 0) {
-		            		$("#sortable"+ (i-1)).prepend(temp);
-		            	} else {
-		            		$("#sortable"+ (i-1) + " li").eq(index-1).after(temp);
-		            	}
-		            }*/
 		            break;
 				}
 		    }
 		}
+	}*/
+
+	function shiftLive(currentList,belongedListPlace, currentListPlace,placeHolderIndex, placeHolderList ) {
+		var steps = Math.abs(belongedListPlace - currentListPlace);
+		if( belongedListPlace > currentListPlace ) {
+			console.log("sol")
+			var temp1, temp2;
+			for(var i = 0; i < steps; i++) {
+				if(startIndex == 0) {
+					if ( i==0 ) {
+						temp1 = $("#sortable" + i + " li").get(placeHolderIndex+ 1);
+					}
+					console.log(temp1)
+					temp2 = $("#sortable" + (i+1) + " li").get(placeHolderIndex);
+					if(placeHolderIndex == 0) {
+						$("#sortable" + (i+1)).prepend(temp1);
+						console.log("prepended : ", temp1)
+					} else {
+						$("#sortable" + i + " li").get(placeHolderIndex-1).after(temp1);
+					}
+					console.log(temp1, "TEMP")
+					console.log(temp2,"TEMP1")
+					temp1 = temp2;
+				}
+				else {
+					console.log("burdayım");
+
+					if ( i==0 ) {
+						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1);
+						$("#sortable" + i + " li").eq(startIndex+1).remove();
+					}
+					temp2 = $("#sortable" + (i+1) + " li").get(placeHolderIndex);
+					$("#sortable" + (i+1) + " li").get(placeHolderIndex-1).after(temp1);
+					console.log(temp1, "TEMP")
+					console.log(temp2,"TEMP1")
+					temp1 = temp2;
+				}
+			}
+		} else {
+			console.log("sag")
+			var temp1, temp2;
+			for(var i = 0; i < steps; i++) {
+				if(startIndex == 0) {
+					if ( i==0 ) {
+						temp1 = $("#sortable" + i + " li").get(placeHolderIndex+ 1);
+					}
+					console.log(temp1)
+					temp2 = $("#sortable" + (i+1) + " li").get(placeHolderIndex);
+					if(placeHolderIndex == 0) {
+						$("#sortable" + (i+1)).prepend(temp1);
+						console.log("prepended : ", temp1)
+					} else {
+						$("#sortable" + i + " li").get(placeHolderIndex-1).after(temp1);
+					}
+					console.log(temp1, "TEMP")
+					console.log(temp2,"TEMP1")
+					temp1 = temp2;
+				}
+				else {
+					console.log("burdayım");
+
+					if ( i==0 ) {
+						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1);
+						$("#sortable" + i + " li").eq(startIndex+1).remove();
+					}
+					temp2 = $("#sortable" + (i+1) + " li").get(placeHolderIndex);
+					$("#sortable" + (i+1) + " li").get(placeHolderIndex-1).after(temp1);
+					console.log(temp1, "TEMP")
+					console.log(temp2,"TEMP1")
+					temp1 = temp2;
+				}
+			}
+		}
 	}
+
+	$(".connectedSortable").on( "sortchange", function( event, ui ) {
+		var placeHolderList = $(".ui-sortable-placeholder").parent().attr("id");
+		var placeHolderIndex = $(".ui-sortable-placeholder").prevAll().length;
+		var belongedListPlace = parseInt($("#" + belongedList).attr("data-place"));
+		var currentListPlace  = parseInt($("#" + placeHolderList).attr("data-place"));
+		//console.log(placeHolderIndex)
+		if(placeHolderList !== belongedList && (currentListPlace+1 == listSize || currentListPlace == 0) && (startIndex == placeHolderIndex)) {
+			if(counter == 0) {
+				shiftLive(placeHolderList,belongedListPlace,currentListPlace,placeHolderIndex,placeHolderList);
+				counter++;
+			}
+
+		}
+	});
+
 
 	function finishMatch () {
 		localStorage.setItem("htmls", "");
