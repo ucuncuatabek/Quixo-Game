@@ -287,7 +287,6 @@ $(function() {
 				}
 				else {
 					console.log("burdayım");
-
 					if ( i==0 ) {
 						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1);
 						$("#sortable" + i + " li").eq(startIndex+1).remove();
@@ -301,11 +300,12 @@ $(function() {
 			}
 		} else {
 			console.log("sag")
+			console.log(currentList)
 			var temp1, temp2;
 			for(var i = steps; i > 0; i--) {
 				if(startIndex == 0) {
 					if ( i == steps ) {
-						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1);
+						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1); // şurada değişiklik yapılması lazım , step sayısı ve liste idsi karışıklığı
 					}
 					temp2 = $("#sortable" + (i-1) + " li").get(placeHolderIndex);
 					if(placeHolderIndex == 0) {
