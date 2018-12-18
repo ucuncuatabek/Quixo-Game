@@ -1,7 +1,44 @@
 
 $(function() {
-	draw(5);
-	initialize();
+	var boardSize , player1, player2;
+	$(function setVariables() {
+		$("buttp")
+		var empty = 0;
+		var variables = {};
+		$("input").keydown(function(element){
+			if($(element.currentTarget).hasClass("error")){
+				$(element.currentTarget).removeClass("error")
+			}
+		});
+
+		$("#game-settings").submit(function(event) {
+			$(event.target).find("input").each(function(key,input) {
+				if($(input).val() == "") {
+					empty++;
+					$(input).addClass("error")
+				} else {
+					variables[$(input).attr("name")] = $(input).val();
+				}
+				if(empty != 0) {
+					console.log(variables)
+					event.preventDefault();
+					return false;
+				}
+			});
+			if(empty == 0) {
+				$("#game-settings").remove();
+				boardSize = variables["board-size"];
+				player1 = variables["player1"];
+				player2 = variables["player2"];
+				draw(parseInt(boardSize));
+				initialize();
+			}
+		});
+	});
+
+	//draw(5);
+	//initialize();
+
 	var lastState, startIndex, belongedList, placedInto, placedIndex, currentRound = 0;
 	var list = [];
 	var listSize;
@@ -9,6 +46,7 @@ $(function() {
 	var symbols = {};
 	var htmls = {};
 	var counter = 0;
+
 	function initialize() {
 		trackChanges();
 		disableCenter();
@@ -67,6 +105,11 @@ $(function() {
 						disableCenter();
 						counter = 0;
 						$(".current-round span").text(currentRound+1)
+						if(currentRound%2==1){
+							$("#player-turn").text(player1);
+						} else{
+							$("#player-turn").text(player2);
+						}
 						currentRound++;
 					}
 				} else {
@@ -340,7 +383,6 @@ $(function() {
 			}
 		}
 		}
-
 	}
 
 	function trackChanges() {
