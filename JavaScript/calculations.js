@@ -135,6 +135,7 @@ $(function() {
 		} else {
 			alert("Enter an odd number bigger than 1 for creating game");
 		}
+		//saveLastState();
 	}
 
 	function drawLastState(htmls) {
@@ -328,7 +329,7 @@ $(function() {
 				}
 				else {
 					console.log("simdi de burda");
-					if ( i == steps ) {
+					if ( i == listSize-1) {
 						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1);
 						$("#sortable" + i + " li").eq(startIndex+1).remove();
 					}
@@ -358,9 +359,6 @@ $(function() {
 			}
 		});
 	}
-
-
-
 
 	function finishMatch () {
 		localStorage.setItem("htmls", "");
