@@ -16,7 +16,6 @@
         margin: 0;
         padding: 5px 0 0 0;
         float: left;
-
       }
      .connectedSortable li {
         line-height: 40px;
@@ -30,19 +29,23 @@
         user-select: none;
         cursor:pointer;
         border:none;
-
+        background: #17153c;
+        box-shadow: -8px 6px 3px 3px rgba(0,0,0,0.2);
+      }
+      .ui-sortable-helper{
+        box-shadow: -8px 6px 3px 3px rgba(0,0,0,0.2);
       }
       .ui-sortable-placeholder {
         width: 45px;
         height:15px;
-        background:#a005ef;
+        background:#a005ef !important;
       }
       .disabled{
         background: #dc3545;
         cursor:default !important;
       }
       .center{
-        background:grey;
+        background:grey !important;
       }
       .board{
         position:fixed;
@@ -50,13 +53,13 @@
         left:40%;
         background:#3b3279;
         border-radius:10px;
-        padding: 35px 25px;
+        padding: 25px 25px;
       }
       [data-sign = "-1"]{
-        background:#007bff;
+        background:#505be4 !important;
       }
       [data-sign = "1"]{
-        background:#FF143B;
+        background:#b9112d !important;
       }
       [data-sign] {
         color: white;
