@@ -7,7 +7,6 @@
 
     <style>
       .connectedSortable {
-        border: 1px solid #eee;
         width: 72px;
         min-height: 20px;
         list-style-type: none;
@@ -18,7 +17,7 @@
       }
      .connectedSortable li {
         line-height: 40px;
-        border-radius:4px;
+        border-radius:10px;
         margin: 0 5px 5px 5px;
         padding: 5px;
         font-size: 50px;
@@ -27,6 +26,8 @@
         text-align: center;
         user-select: none;
         cursor:pointer;
+        border:none;
+
       }
       .ui-sortable-placeholder {
         width: 45px;
@@ -44,12 +45,15 @@
         position:fixed;
         top:30%;
         left:40%;
+        background:#3b3279;
+        border-radius:10px;
+        padding: 36px 28px;
       }
       [data-sign = "-1"]{
         background:#007bff;
       }
       [data-sign = "1"]{
-        background:#dc3545;
+        background:#FF143B;
       }
       [data-sign] {
         color: white;
