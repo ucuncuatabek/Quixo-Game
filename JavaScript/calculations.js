@@ -324,8 +324,6 @@ $(function() {
 					console.log(temp1, "TEMP")
 					console.log(temp2,"TEMP1")
 					temp1 = temp2;
-
-
 				}
 				else {
 					console.log("simdi de burda");
@@ -368,15 +366,23 @@ $(function() {
 	function checkWinner() {
 		//check diagonal
 		var temp = 0;
+		var collect = [];
 		function check() {
 			if(Math.abs(temp) == listSize) {
 				if(temp < 0) {
-					alert("Winner Player 1 (X)");
+					$.each(collect,function(key,element){
+						$(element).addClass("glow")
+					})
+					$(".connectedSortable").sortable("destroy")
 					return "win"
 				} else {
-					alert("Winner Player 2 (O)");
+					$.each(collect,function(key,element){
+						$(element).addClass("glow")
+					})
+					$(".connectedSortable").sortable("destroy")
 					return "win"
 				}
+
 			} else {
 				temp = 0;
 			}
@@ -384,15 +390,19 @@ $(function() {
 		for ( var i = 0; i < listSize; i++ ) {
 			var element = $("#sortable"+ (i) + " li").get(i);
 			temp += parseInt($(element).attr("data-sign"));
+			collect.push(element);
 		}
 		check();
+		collect = [];
 		//check row
 		for ( var i = 0; i < listSize; i++ ) {
 			for ( var j = 0; j < listSize; j++ ) {
 				var element = $("#sortable"+ (j) + " li").get(i);
 				temp += parseInt($(element).attr("data-sign"));
+				collect.push(element);
 			}
 			check();
+			collect = [];
 			temp = 0;
 		}
 		check();//check column
@@ -400,8 +410,10 @@ $(function() {
 			for ( var j = 0; j < listSize; j++ ) {
 				var element = $("#sortable"+ (i) + " li").get(j);
 				temp += parseInt($(element).attr("data-sign"));
+				collect.push(element);
 			}
 			check();
+			collect = [];
 		}
 	}
 });

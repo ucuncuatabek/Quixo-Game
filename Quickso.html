@@ -38,14 +38,14 @@
       .ui-sortable-placeholder {
         width: 45px;
         height:15px;
-        background:#a005ef !important;
+        background:#603079 !important;
       }
       .disabled{
         background: #dc3545;
         cursor:default !important;
       }
       .center{
-        background:grey !important;
+        background:#1d172b !important;
       }
       .board{
         position:fixed;
@@ -69,6 +69,20 @@
       }
       .current-round{
         color:white;
+      }
+
+
+
+
+      @keyframes glowing {
+        0% { box-shadow:  -2px 0px -10px 5px #1281d0; }
+        40% { box-shadow: -2px 0px 21px 5px #1281d0; }
+        60% { box-shadow: -2px 0px 21px 5px #1281d0; }
+        100% { box-shadow:-2px 0px -10px 5px #1281d0; }
+      }
+
+      .glow {
+        animation: glowing 2000ms 5;
       }
 
     </style>
