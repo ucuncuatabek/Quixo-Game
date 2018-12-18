@@ -62,6 +62,7 @@ $( function() {
 		$(".connectedSortable").sortable({
 			connectWith: ".connectedSortable",
 			cancel:".disabled",
+			items:"li:not(.cancelled)",
 			placeholder: "ui-state-highlight",
 			start : function(event, ui) {
 				startIndex 	 = $(ui.item).prevAll().length;
@@ -78,19 +79,38 @@ $( function() {
 					$(ui.item).text(value);
 				}
 				var items = "";
-				$("ul").each(function(key,value) {
+				$("ul").each(function(key, value) {
 					if($(value).attr("id") !== belongedList && (key > 0 && key < listSize-1)) {
 						items += "#" + $(value).attr("id") + ",";
+					} else {
+						if($(value).attr("id") !== belongedList) {
+							$(value).find("li").each(function(key,li) {
+								if(key !== startIndex){
+									$(li).addClass("cancelled");
+									console.log($(li))
+								}
+							})
+						}
+
 					}
 				});
+
 				var disable = items.substring(0,(items.length)-1);
-				console.log(disable)
+				console.log(disable);
+
 				$(disable).sortable("disable");
+
 				$("#" + belongedList).sortable("refresh");
 			},
 			stop :  function(event, ui) {
 				placedIndex = $(ui.item).prevAll().length;
 				placedInto 	= $(ui.item).parent().attr("id");
+				if(placedIndex == startIndex && placedInto == belongedList){
+					$(".connectedSortable").sortable("enable");
+				}
+				$("li").each(function(key,li){
+					$(li).removeClass("cancelled")
+				})
 				var result = checkLegality(startIndex, belongedList, placedIndex, placedInto);
 				if(result) {
 					if (placedInto !== belongedList ) {
@@ -326,48 +346,48 @@ $( function() {
 		var steps = Math.abs(belongedListPlace - currentListPlace);
 		if(steps > 0){
 			if( belongedListPlace > currentListPlace ) {
-			console.log("sol")
-			var temp1, temp2;
-			for(var i = 0; i < steps; i++) {
-				if(startIndex == 0) {
-					if ( i==0 ) {
-						temp1 = $("#sortable" + i + " li").get(placeHolderIndex+ 1);
+				console.log("sol")
+				var temp1, temp2;
+				for(var i = 0; i < steps; i++) {
+					if(startIndex == 0) {
+						if ( i==0 ) {
+							temp1 = $("#sortable" + i + " li").get(placeHolderIndex+ 1);
+						}
+						console.log(temp1)
+						temp2 = $("#sortable" + (i+1) + " li").get(placeHolderIndex);
+						if(placeHolderIndex == 0) {
+							$("#sortable" + (i+1)).prepend(temp1);
+							console.log("prepended : ", temp1)
+						} else {
+							$("#sortable" + i + " li").get(placeHolderIndex-1).after(temp1);
+						}
+						console.log(temp1, "TEMP")
+						console.log(temp2,"TEMP1")
+						temp1 = temp2;
 					}
-					console.log(temp1)
-					temp2 = $("#sortable" + (i+1) + " li").get(placeHolderIndex);
-					if(placeHolderIndex == 0) {
-						$("#sortable" + (i+1)).prepend(temp1);
-						console.log("prepended : ", temp1)
-					} else {
-						$("#sortable" + i + " li").get(placeHolderIndex-1).after(temp1);
+					else {
+						console.log("burdayım");
+						if ( i==0 ) {
+							temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1);
+							$("#sortable" + i + " li").eq(startIndex+1).remove();
+						}
+						temp2 = $("#sortable" + (i+1) + " li").get(placeHolderIndex);
+						$("#sortable" + (i+1) + " li").get(placeHolderIndex-1).after(temp1);
+						console.log(temp1, "TEMP")
+						console.log(temp2,"TEMP1")
+						temp1 = temp2;
 					}
-					console.log(temp1, "TEMP")
-					console.log(temp2,"TEMP1")
-					temp1 = temp2;
 				}
-				else {
-					console.log("burdayım");
-					if ( i==0 ) {
-						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1);
-						$("#sortable" + i + " li").eq(startIndex+1).remove();
-					}
-					temp2 = $("#sortable" + (i+1) + " li").get(placeHolderIndex);
-					$("#sortable" + (i+1) + " li").get(placeHolderIndex-1).after(temp1);
-					console.log(temp1, "TEMP")
-					console.log(temp2,"TEMP1")
-					temp1 = temp2;
-				}
-			}
-		} else {
-			console.log("sag")
-			console.log(listSize-1,"aksdjlasdasd")
-			var temp1, temp2;
-			for(var i = listSize-1; i > listSize-1-steps; i--) {
-				if(startIndex == 0) {
-					console.log("suan buradayiz")
+			} else {
+				console.log("sag")
+				console.log(listSize-1,"aksdjlasdasd")
+				var temp1, temp2;
+				for(var i = listSize-1; i > listSize-1-steps; i--) {
+					if(startIndex == 0) {
+						console.log("suan buradayiz")
 
-					console.log(steps, "steps")
-					if ( i == listSize-1 ) {
+						console.log(steps, "steps")
+						if ( i == listSize-1 ) {
 						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1); // şurada değişiklik yapılması lazım , step sayısı ve liste idsi karışıklığı
 					}
 					temp2 = $("#sortable" + (i-1) + " li").get(placeHolderIndex);
@@ -394,30 +414,30 @@ $( function() {
 				}
 			}
 		}
-		}
 	}
+}
 
-	function trackChanges() {
-		$(".connectedSortable").on("sortchange", function( event, ui ) {
-			var placeHolderList = $(".ui-sortable-placeholder").parent().attr("id");
-			var placeHolderIndex = $(".ui-sortable-placeholder").prevAll().length;
-			var belongedListPlace = parseInt($("#" + belongedList).attr("data-place"));
-			var currentListPlace  = parseInt($("#" + placeHolderList).attr("data-place"));
-			if(placeHolderList !== belongedList && (currentListPlace+1 == listSize || currentListPlace == 0) && (startIndex == placeHolderIndex)) {
-				if(counter == 0) {
-					shiftLive(placeHolderList,belongedListPlace,currentListPlace,placeHolderIndex,placeHolderList);
-					counter++;
-				}
+function trackChanges() {
+	$(".connectedSortable").on("sortchange", function( event, ui ) {
+		var placeHolderList = $(".ui-sortable-placeholder").parent().attr("id");
+		var placeHolderIndex = $(".ui-sortable-placeholder").prevAll().length;
+		var belongedListPlace = parseInt($("#" + belongedList).attr("data-place"));
+		var currentListPlace  = parseInt($("#" + placeHolderList).attr("data-place"));
+		if(placeHolderList !== belongedList && (currentListPlace+1 == listSize || currentListPlace == 0) && (startIndex == placeHolderIndex)) {
+			if(counter == 0) {
+				shiftLive(placeHolderList,belongedListPlace,currentListPlace,placeHolderIndex,placeHolderList);
+				counter++;
 			}
-		});
-	}
+		}
+	});
+}
 
-	function finishMatch () {
-		localStorage.setItem("htmls", "");
-		location.reload();
-	}
+function finishMatch () {
+	localStorage.setItem("htmls", "");
+	location.reload();
+}
 
-	function checkWinner() {
+function checkWinner() {
 		//check diagonal
 		var temp = 0;
 		var collect = [];
