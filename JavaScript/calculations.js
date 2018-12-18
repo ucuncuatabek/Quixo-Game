@@ -10,6 +10,7 @@ $(function() {
 	var htmls = {};
 	var counter = 0;
 	function initialize() {
+		trackChanges();
 		disableCenter();
 		$(".connectedSortable").sortable({
 			connectWith: ".connectedSortable",
@@ -69,10 +70,11 @@ $(function() {
 						currentRound++;
 					}
 				} else {
+					counter = 0;
 					if( $(ui.item).data("fixed") == null ) {
 						$(ui.item).text("");
 					}
-					$(".connectedSortable").sortable("cancel")
+					//$(".connectedSortable").sortable("cancel")
 					drawLastState(JSON.parse(localStorage.getItem("htmls")));
 				}
 			}
@@ -125,7 +127,7 @@ $(function() {
 			for (var i = 0; i < size; i++) {
 				tmp = `<ul id="sortable${i}" class="connectedSortable" data-place="${i}">`;
 				for(var j = 0; j < size; j++) {
-					tmp += `<li id="${j}${i}" class="ui-state-default">${j}${i}</li>`;
+					tmp += `<li id="${j}${i}" class="ui-state-default"></li>`;
 				}
 				tmp += "</ul>";
 				$(".board").append(tmp);
@@ -264,8 +266,10 @@ $(function() {
 	}*/
 
 	function shiftLive(currentList,belongedListPlace, currentListPlace,placeHolderIndex, placeHolderList ) {
+		console.clear()
 		var steps = Math.abs(belongedListPlace - currentListPlace);
-		if( belongedListPlace > currentListPlace ) {
+		if(steps > 0){
+			if( belongedListPlace > currentListPlace ) {
 			console.log("sol")
 			var temp1, temp2;
 			for(var i = 0; i < steps; i++) {
@@ -300,11 +304,14 @@ $(function() {
 			}
 		} else {
 			console.log("sag")
-			console.log(currentList)
+			console.log(listSize-1,"aksdjlasdasd")
 			var temp1, temp2;
-			for(var i = steps; i > 0; i--) {
+			for(var i = listSize-1; i > listSize-1-steps; i--) {
 				if(startIndex == 0) {
-					if ( i == steps ) {
+					console.log("suan buradayiz")
+
+					console.log(steps, "steps")
+					if ( i == listSize-1 ) {
 						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1); // şurada değişiklik yapılması lazım , step sayısı ve liste idsi karışıklığı
 					}
 					temp2 = $("#sortable" + (i-1) + " li").get(placeHolderIndex);
@@ -316,9 +323,11 @@ $(function() {
 					console.log(temp1, "TEMP")
 					console.log(temp2,"TEMP1")
 					temp1 = temp2;
+
+
 				}
 				else {
-					console.log("burdayım");
+					console.log("simdi de burda");
 					if ( i == steps ) {
 						temp1 = $("#sortable" + i + " li").get(placeHolderIndex + 1);
 						$("#sortable" + i + " li").eq(startIndex+1).remove();
@@ -331,21 +340,26 @@ $(function() {
 				}
 			}
 		}
+		}
+
 	}
 
-	$(".connectedSortable").on( "sortchange", function( event, ui ) {
-		var placeHolderList = $(".ui-sortable-placeholder").parent().attr("id");
-		var placeHolderIndex = $(".ui-sortable-placeholder").prevAll().length;
-		var belongedListPlace = parseInt($("#" + belongedList).attr("data-place"));
-		var currentListPlace  = parseInt($("#" + placeHolderList).attr("data-place"));
-		//console.log(placeHolderIndex)
-		if(placeHolderList !== belongedList && (currentListPlace+1 == listSize || currentListPlace == 0) && (startIndex == placeHolderIndex)) {
-			if(counter == 0) {
-				shiftLive(placeHolderList,belongedListPlace,currentListPlace,placeHolderIndex,placeHolderList);
-				counter++;
+	function trackChanges() {
+		$(".connectedSortable").on("sortchange", function( event, ui ) {
+			var placeHolderList = $(".ui-sortable-placeholder").parent().attr("id");
+			var placeHolderIndex = $(".ui-sortable-placeholder").prevAll().length;
+			var belongedListPlace = parseInt($("#" + belongedList).attr("data-place"));
+			var currentListPlace  = parseInt($("#" + placeHolderList).attr("data-place"));
+			if(placeHolderList !== belongedList && (currentListPlace+1 == listSize || currentListPlace == 0) && (startIndex == placeHolderIndex)) {
+				if(counter == 0) {
+					shiftLive(placeHolderList,belongedListPlace,currentListPlace,placeHolderIndex,placeHolderList);
+					counter++;
+				}
 			}
-		}
-	});
+		});
+	}
+
+
 
 
 	function finishMatch () {
