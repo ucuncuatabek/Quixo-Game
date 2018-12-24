@@ -44,7 +44,7 @@ $( function() {
 		}
 	});*/
 
-	draw(5);
+	draw(9);
 	initialize();
 	var lastState, startIndex, belongedList, placedInto, placedIndex, currentRound = 0;
 	var list = [];
@@ -200,19 +200,28 @@ $( function() {
 
 	function draw(size) {
 		listSize = size;
-		if( size%2 !== 0 && size > 1) {
+		html     = "";
+
+		if(size % 2 !== 0 && size > 1) {
+			var $board = $(".board");
+
 			for (var i = 0; i < size; i++) {
-				tmp = `<ul id="sortable${i}" class="connectedSortable" data-place="${i}">`;
+				html += `<ul id="sortable${i}" class="connectedSortable" data-place="${i}">`;
 				for(var j = 0; j < size; j++) {
-					tmp += `<li id="${j}${i}" class="ui-state-default"></li>`;
+					html += `<li id="${j}${i}" class="ui-state-default"></li>`;
 				}
-				tmp += "</ul>";
-				$(".board").append(tmp);
+				html += "</ul>";
 			}
+
+			$board.append(html);
+
+			$board.css({
+				top: `calc(50% - (${$board.outerHeight()}px / 2))`,
+				left: `calc(50% - (${$board.outerWidth()}px / 2))`
+			})
 		} else {
 			alert("Enter an odd number bigger than 1 for creating game");
 		}
-		//saveLastState();
 	}
 
 	function drawLastState(htmls) {
