@@ -1,6 +1,6 @@
 
 $( function() {
-	var boardSize , player1, player2;
+	var boardSize , player1, player2, Xmoves = 0, Omoves = 0;
 
 	/*$(function setVariables() {
 		if(localStorage.getItem("htmls") !== "" && localStorage.getItem("htmls") !== "{}") {
@@ -126,8 +126,10 @@ $( function() {
 					} else {
 						if ( currentRound % 2 == 0 ) {
 							disableByRound("o");
+							Omoves++;
 						} else {
 							disableByRound("x");
+							Xmoves++;
 						}
 
 						$(ui.item).attr("fixed",true);
@@ -138,11 +140,12 @@ $( function() {
 						counter = 0;
 						$(".current-round span").text(currentRound+1)
 						if(currentRound%2==1){
-							$("#player-turn").text(player1);
-						} else{
-							$("#player-turn").text(player2);
+							$("#player-turn").text("X");
+						} else {
+							$("#player-turn").text("O");
 						}
-
+						console.log(Omoves,Xmoves)
+						countSymbols();
 						currentRound++;
 					}
 				} else {
@@ -193,7 +196,6 @@ $( function() {
 					$(elem).addClass("disabled");
 				}
 			}
-
 		});
 		initialize();
 	}
@@ -269,168 +271,6 @@ $( function() {
 		//console.log("state saved!");
 	}
 
-	/*function shiftLive(currentList, index) {
-		console.clear();
-		//console.log("shift calisti");
-		var listIndex = parseInt($("#"+currentList).attr("data-place"));
-		var belongedListIndex = parseInt($("#"+belongedList).attr("data-place"));
-		if (belongedList > placedInto) {
-			//console.log("sol")
-
-			for ( var i = 0; i < listSize; i++ ) {
-				for ( var j = 0; j < listSize; j++ ) {
-			        if ( j == index && i+1 !== listSize) {
-		            	var temp = $("#sortable"+ (i) + " li").get(index + 1);
-		            	if (belongedListIndex > 0 && belongedListIndex < listSize ) {
-		            		if( i !== belongedListIndex ) {
-		            			if(index == 0) {
-				            		$("#sortable"+ (i+1)).prepend(temp);
-				            	}else {
-				            		$("#sortable"+ (i+1) + " li").get(index-1).after(temp);
-				            	}
-		            		}
-		            		if(i == belongedListIndex  ){
-		            			return true;
-		            		}
-		            	} else {
-		            		$("#sortable"+ (i) + " li").get(j+1).remove();
-				            if( "sortable" + (i+1) !== belongedList) {
-				            	if(index == 0) {
-				            		$("#sortable"+ (i+1)).prepend(temp);
-				            	}else {
-				            		$("#sortable"+ (i+1) + " li").get(index-1).after(temp);
-				            	}
-				            } else {
-				            	if(index == 0) {
-				            		$("#sortable"+ (i+1)).prepend(temp);
-				            	} else {
-				            		$("#sortable"+ (i+1) + " li").eq(j-1).after(temp);
-				            	}
-				            }
-		            	}
-			            break;
-			        }
-				}
-		    }
-
-		} else {
-			//console.log("sağ")
-			for ( var i = listSize - 1; i > 0; i-- ) {
-				for (var j = 0; j < listSize ; j++) {
-
-	            	if (belongedListIndex > 0 && belongedListIndex < listSize ) {
-	            		var temp = $("#sortable"+ (i) + " li").get(index+1);
-	            		if( i !== belongedListIndex ) {
-	            			if(index == 0) {
-			            		$("#sortable"+ (i-1)).prepend(temp);
-			            	}else {
-			            		$("#sortable"+ (i-1) + " li").get(index-1).after(temp);
-			            	}
-	            		}
-	            		if(i == belongedListIndex  ) {
-	            			return true;
-	            		}
-	            	} else {
-	            		var temp = $("#sortable"+ (i) + " li").get(index+1);
-	            		//console.log(temp)
-	            		//$("#sortable"+ (i) + " li").get(j+1).remove();
-				         if( "sortable" + (i-1) !== belongedList) {
-			            	if(index == 0) {
-			            		$("#sortable"+ (i-1)).prepend(temp);
-			            	} else {
-			            		$("#sortable"+ (i-1) + " li").get(index-1).after(temp);
-			            	}
-			            } else {
-			            	if(index == 0) {
-			            		$("#sortable"+ (i-1)).prepend(temp);
-			            	} else {
-			            		$("#sortable"+ (i-1) + " li").eq(index-1).after(temp);
-			            	}
-			            }
-	            	}
-		            break;
-				}
-		    }
-		}
-	}*/
-/*
-	function shiftLive(currentList,belongedListPlace, currentListPlace,placeHolderIndex, placeHolderList ) {
-		console.clear()
-		var steps = Math.abs(belongedListPlace - currentListPlace);
-		if(steps > 0) {
-			if( belongedListPlace > currentListPlace ) {
-				//console.log("sol")
-				var temp1, temp2;
-				for(var i = 0; i < steps; i++) {
-					if(startIndex == 0) {
-						if ( i == 0 ) {
-							temp1 = $("#sortable" + i + " li").get(startIndex+ 1);
-						}
-						//console.log(temp1)
-						temp2 = $("#sortable" + (i+1) + " li").get(startIndex);
-						if(startIndex == 0) {
-							$("#sortable" + (i+1)).prepend(temp1);
-							//console.log("prepended : ", temp1)
-						} else {
-							$("#sortable" + i + " li").get(startIndex-1).after(temp1);
-						}
-						//console.log(temp1, "TEMP")
-						//console.log(temp2,"TEMP1")
-						temp1 = temp2;
-					}
-					else {
-						//console.log("burdayım");
-						if ( i==0 ) {
-							temp1 = $("#sortable" + i + " li").get(startIndex + 1);
-							$("#sortable" + i + " li").eq(startIndex+1).remove();
-						}
-						temp2 = $("#sortable" + (i+1) + " li").get(startIndex);
-						$("#sortable" + (i+1) + " li").get(startIndex-1).after(temp1);
-						//console.log(temp1, "TEMP")
-						//console.log(temp2,"TEMP1")
-						temp1 = temp2;
-					}
-				}
-			} else {
-				//console.log("sag")
-				//console.log(listSize-1,"aksdjlasdasd")
-				var temp1, temp2;
-				for(var i = listSize-1; i > listSize-1-steps; i--) {
-					if(startIndex == 0) {
-						//console.log("suan buradayiz")
-
-						//console.log(steps, "steps")
-						if ( i == listSize-1 ) {
-						temp1 = $("#sortable" + i + " li").get(startIndex + 1); // şurada değişiklik yapılması lazım , step sayısı ve liste idsi karışıklığı
-					}
-					temp2 = $("#sortable" + (i-1) + " li").get(startIndex);
-					if(startIndex == 0) {
-						$("#sortable" + (i-1)).prepend(temp1);
-					} else {
-						$("#sortable" + i + " li").get(startIndex-1).after(temp1);
-					}
-					//console.log(temp1, "TEMP")
-					//console.log(temp2,"TEMP1")
-					temp1 = temp2;
-				}else {
-					//console.log("simdi de burda");
-					if ( i == listSize-1) {
-						temp1 = $("#sortable" + i + " li").get(startIndex + 1);
-						$("#sortable" + i + " li").eq(startIndex+1).remove();
-					}
-					temp2 = $("#sortable" + (i-1) + " li").get(startIndex);
-					$("#sortable" + (i-1) + " li").get(startIndex-1).after(temp1);
-					//console.log(temp1, "TEMP")
-					//console.log(temp2,"TEMP1")
-					temp1 = temp2;
-				}
-			}
-		}
-		}
-	}
-*/
-
-
 	function indexer() {
 		$("ul").each(function(key,ul) {
 			$(ul).find("li").each(function(key,li){
@@ -461,8 +301,7 @@ $( function() {
 							$("#sortable" + i + " li").get(startIndex-1).after(temp1);
 						}
 						temp1 = temp2;
-					}
-					else {
+					} else {
 						if ( i == 0 ) {
 							temp1 = $("#sortable" + i + " [data-index = " + startIndex + "]");
 							shiftedElements.push($(temp1).attr("id"));
@@ -509,7 +348,6 @@ $( function() {
 		//console.log(shiftedElements," shifted elements")
 	}
 
-
 	/*function revertShift() {
 		//console.log("reverting now")
 		var board = JSON.parse(localStorage.getItem("htmls"));
@@ -540,7 +378,7 @@ $( function() {
 				}
 			}
 
-			if(counter !== 0 && placeHolderList == belongedList)	{
+			if(counter !== 0 && ((currentListPlace + 1 != listSize && currentListPlace != 0) || placeHolderList == belongedList))	{
 				drawLastState(JSON.parse(localStorage.getItem("htmls")));
 				counter = 0 ;
 			}
@@ -553,8 +391,32 @@ $( function() {
 		location.reload();
 	}
 
+	function countSymbols() {
+		var Xcount = 0;
+		var Ocount = 0;
+
+		$("li").each(function(key, element) {
+			var sign = $(element).attr("data-sign");
+			if(sign == -1) {
+				Xcount = Xcount + 1;
+			}
+			if(sign == 1){
+				Ocount = Ocount + 1;
+			}
+		});
+		/*if(Xcount > Ycount){
+			$(".game-status").text("X dominates");
+		} else if(Ycount> Xcount){
+			$(".game-status").text("Y dominates");
+		} else{
+			$(".game-status").text("X and Y are equal");
+		}*/
+		$("#Xcount").text(Xcount);
+		$("#Ocount").text(Ocount);
+	}
+
 	function checkWinner() {
-			//check diagonal
+
 			var temp = 0;
 			var collect = [];
 			function check() {
@@ -577,6 +439,7 @@ $( function() {
 					temp = 0;
 				}
 			}
+			//check diagonal right
 			for ( var i = 0; i < listSize; i++ ) {
 				var element = $("#sortable"+ (i) + " li").get(i);
 				temp += parseInt($(element).attr("data-sign"));
@@ -584,6 +447,16 @@ $( function() {
 			}
 			check();
 			collect = [];
+			//check diagonal left
+			var y = 0;
+			for ( var i = listSize-1; i >= 0; i-- ) {
+				var element = $("#sortable"+ (i) + " li").get(y);
+				temp += parseInt($(element).attr("data-sign"));
+				collect.push(element);
+				y++;
+			}
+			check();
+
 			//check row
 			for ( var i = 0; i < listSize; i++ ) {
 				for ( var j = 0; j < listSize; j++ ) {
@@ -605,6 +478,6 @@ $( function() {
 				check();
 				collect = [];
 			}
-		}
-	});
+	}
+});
 

@@ -17,6 +17,7 @@
         margin: 0;
         padding: 5px 0 0 0;
         float: left;
+        margin-right:10px;
       }
      .connectedSortable li {
         line-height: 35px;
@@ -31,7 +32,7 @@
         cursor:pointer;
         border:none;
         background: #17153c;
-        margin-bottom:10px;
+        margin-bottom:22px;
       }
 
       .ui-sortable-placeholder {
@@ -66,7 +67,7 @@
       .ghost{
         background :#bbb0b0;
       }
-      .current-round,.Player-turn{
+      .current-round, .Player-turn, .symbol-count, .game-status{
         color:white;
       }
       .error{
@@ -108,6 +109,9 @@
   <body>
     <h2 class="current-round"> Current Round : <span></span> </h2>
     <h2 class="Player-turn">  Your Turn: <span id="player-turn"></span></h2>
+    <h2 class ="symbol-count"> Number of X on Board : <span id ="Xcount"></span></h2>
+    <h2 class ="symbol-count"> Number of Y on Board : <span id ="Ocount"></span></h2>
+    //<h2 class ="game-status"></h2>
     <div class="board">
      <!--  <form id="game-settings">
 
