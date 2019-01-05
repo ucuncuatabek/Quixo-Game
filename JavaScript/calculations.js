@@ -456,7 +456,7 @@ $( function() {
 				y++;
 			}
 			check();
-
+            collect=[];
 			//check row
 			for ( var i = 0; i < listSize; i++ ) {
 				for ( var j = 0; j < listSize; j++ ) {
