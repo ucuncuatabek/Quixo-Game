@@ -44,7 +44,7 @@ $( function() {
 		}
 	});*/
 
-	draw(9);
+	draw(5);
 	initialize();
 	var lastState, startIndex, belongedList, placedInto, placedIndex, currentRound = 0;
 	var list = [];
